@@ -4,11 +4,13 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
+import numpy as np
 
 # Reading Data
 pairs_price = pd.read_csv("Pairs_Price.csv")
 pairs_ri = pd.read_csv("Pairs_RI.csv")
 print(pairs_price.head())
+print(pairs_ri.head())
 
 # Init Prices
 days = pd.to_datetime(pairs_price["date"], dayfirst = True)
@@ -45,8 +47,3 @@ plt.plot(days, spread_HYUNDAI, label="spread_HYUNDAI")
 plt.plot(days, spread_STORAENSO, label="spread_STORAENSO")
 plt.legend()
 plt.show()
-
-
-
-# 1_5
-
