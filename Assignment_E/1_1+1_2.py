@@ -7,8 +7,8 @@ from plotnine import *
 
 #1.1
 
-pp = pd.read_csv('~/Algorithm Trading/Data/Pairs_Price.csv', index_col=['date'])
-pr = pd.read_csv('~/Algorithm Trading/Data/Pairs_RI.csv', index_col=['date'])
+pp = pd.read_csv("Pairs_Price.csv", index_col=['date'])
+pr = pd.read_csv("Pairs_RI.csv", index_col=['date'])
 
 pr2 = pr.pct_change(1)
 lis2 = list(pr)
