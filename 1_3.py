@@ -47,3 +47,18 @@ plt.plot(days, spread_HYUNDAI, label="spread_HYUNDAI")
 plt.plot(days, spread_STORAENSO, label="spread_STORAENSO")
 plt.legend()
 plt.show()
+
+output_dict = {
+    'APMOLLER': spread_APMOLLER, 
+    'INDUSTRIVARDEN': spread_INDUSTRIVARDEN, 
+    'INVESTOR': spread_INVESTOR, 
+    'SVENSKAHANDBKN': spread_SVENSKAHANDBKN,
+    'VOLVO': spread_VOLVO,
+    'VW': spread_VW,
+    'HYUNDAI': spread_HYUNDAI,
+    'STORAENSO': spread_STORAENSO
+    }
+
+output_df = pd.DataFrame(data = output_dict, index = days)
+print(output_df.describe())
+# print(output_df.describe().to_latex())
