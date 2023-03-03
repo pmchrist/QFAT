@@ -12,6 +12,9 @@ pairs_ri = pd.read_csv("Pairs_RI.csv")
 print(pairs_price.head())
 #print(pairs_ri.head())
 
+# Drop NaN's
+pairs_price = pairs_price.dropna()
+
 
 # 1_5
 
