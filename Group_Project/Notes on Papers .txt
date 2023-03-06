@@ -1,0 +1,40 @@
+Papers:
+
+Fama-French
+https://www.sciencedirect.com/science/article/pii/S0304405X14002323?via%3Dihub      - FF factors
+https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/variable_definitions.html    - Parameters description
+https://github.com/fischlerben/Algorithmic-Trading-Project - Some code with FF
+https://www.linkedin.com/pulse/code-your-own-algorithmic-trading-strategy-roger-hahn/ - More code on FF
+http://arno.uvt.nl/show.cgi?fid=150225      - Good strategy which uses momentum and FF
+https://efmaefm.org/0EFMAMEETINGS/EFMA%20ANNUAL%20MEETINGS/2017-Athens/papers/EFMA2017_0202_fullpaper.pdf   - One more strategy with FF
+Note: We are given FF 3 factors, but other 2 can be calculate ourselves (if necessary)(as I understood)
+
+All the given datasets are used in proffessor Rottke's paper
+https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3083143
+
+Something on Momentum:
+https://pages.stern.nyu.edu/~lpederse/papers/ValMomEverywhere.pdf
+
+Betting agains beta
+https://www.sciencedirect.com/science/article/pii/S0304405X13002675     - Original paper
+https://www.sciencedirect.com/science/article/pii/S0304405X1930176X     - Follow-up paper
+http://wp.lancs.ac.uk/fofi2018/files/2018/03/FoFi-2018-0085-Pedro-Barroso.pdf
+
+Volatility
+https://www.sciencedirect.com/science/article/pii/S0304405X18302745
+https://www0.gsb.columbia.edu/faculty/rhodrick/crosssection.pdf
+
+Quality minus junk
+https://link.springer.com/article/10.1007/s11142-018-9470-2?source=content_type:react%7Cfirst_level_url:article%7Csection:main_content%7Cbutton:body_link   - We have all characteristics except Safety
+
+More ML approach, with PCA decomposition for portfolio construction
+https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3623983
+https://www.machinelearningplus.com/machine-learning/portfolio-optimization-python-example/
+https://github.com/Gustrigos/Eigen-Portfolio
+
+
+
+ToDo:
+Make sense of how to read and combine data
+Generate FF-3 Monthly portfolios
+Use other ideas from papers to generate more alpha
