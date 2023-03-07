@@ -33,6 +33,9 @@ https://www.machinelearningplus.com/machine-learning/portfolio-optimization-pyth
 https://github.com/Gustrigos/Eigen-Portfolio
 
 
+Notes:
+Given FF factors are given to evaluate a strategy (alpha/FF)
+
 
 ToDo:
 Make sense of how to read and combine data
