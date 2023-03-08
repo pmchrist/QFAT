@@ -1,3 +1,12 @@
+Possibilities for Trades:
+1) We are scored based on the FF-3 outperformance. To us is given FF-3, with WML (more on it here https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_developed_mom.html).
+2) With given data we can find FF-5, because Investment(INV) and Operating Profitability (OP) are given
+3) Also, with given data we can easily find momentum, because Trailing Returns are given (Ret11, Ret10)
+4) Moreover, implied volatility of returns is given, which means we can create volatility filter too. Combine with some Risk Free rate etc.
+5) Currently we have implemented a simple strategyh which trades on the given FF-3 factors. We can improve a lot here
+
+
+
 Papers:
 
 Fama-French
@@ -31,13 +40,3 @@ More ML approach, with PCA decomposition for portfolio construction
 https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3623983
 https://www.machinelearningplus.com/machine-learning/portfolio-optimization-python-example/
 https://github.com/Gustrigos/Eigen-Portfolio
-
-
-Notes:
-Given FF factors are given to evaluate a strategy (alpha/FF)
-
-
-ToDo:
-Make sense of how to read and combine data
-Generate FF-3 Monthly portfolios
-Use other ideas from papers to generate more alpha
