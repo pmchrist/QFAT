@@ -48,38 +48,49 @@ def spread_trade(name_security_A, name_security_B, pairs_price, delay=0):
         elif short_on_cheap:
             df_spread_trade["Trade"][i] = -1
         # Enter Trade
-        if df_spread_trade["spread_rolling_z_score"][i - 1 - delay] > 2 and not long_on_cheap:      # Go Long
+        if df_spread_trade["spread_rolling_z_score"][i - delay] > 2 and not long_on_cheap:      # Go Long
             df_spread_trade["Trade"][i] = 1
             long_on_cheap = True
-        elif df_spread_trade["spread_rolling_z_score"][i - 1 - delay] < -2 and not short_on_cheap:   # Go Short
+        elif df_spread_trade["spread_rolling_z_score"][i - delay] < -2 and not short_on_cheap:   # Go Short
             df_spread_trade["Trade"][i] = -1
             short_on_cheap = True
         # Exit Trade
-        if df_spread_trade["spread_rolling_z_score"][i - 1 - delay] < 0 and long_on_cheap:      # Stop Long
+        if df_spread_trade["spread_rolling_z_score"][i - delay] < 0 and long_on_cheap:      # Stop Long
             df_spread_trade["Trade"][i] = 0
             long_on_cheap = False
-        elif df_spread_trade["spread_rolling_z_score"][i - 1 - delay] > 0 and short_on_cheap:   # Stop Short
+        elif df_spread_trade["spread_rolling_z_score"][i - delay] > 0 and short_on_cheap:   # Stop Short
             df_spread_trade["Trade"][i] = 0
             short_on_cheap = False
 
     # Find Returns
     df_spread_trade["Returns"] = np.zeros(len(df_spread_trade))
     for i in range(len(df_spread_trade)):
-        if (df_spread_trade["Trade"][i] > 0):       # We are Short Expensive Security, Long Second
-            df_spread_trade["Returns"][i] = (df_spread_trade[name_security_A][i-1] - df_spread_trade[name_security_A][i])/df_spread_trade[name_security_A][i] + (df_spread_trade[name_security_B][i] - df_spread_trade[name_security_B][i-1])/df_spread_trade[name_security_B][i-1]
-        elif (df_spread_trade["Trade"][i] < 0):     # We are Long Expensive Security, Short Second
-            df_spread_trade["Returns"][i] = (df_spread_trade[name_security_A][i] - df_spread_trade[name_security_A][i-1])/df_spread_trade[name_security_B][i-1] + (df_spread_trade[name_security_B][i-1] - df_spread_trade[name_security_B][i])/df_spread_trade[name_security_B][i]
+        if i > 0:
+            if (df_spread_trade["Trade"][i-1] > 0):       # We are Short Security A, Long Security B
+                # Short expensive security:
+                short_A= -1 * (df_spread_trade[name_security_A][i] - df_spread_trade[name_security_A][i-1]) / df_spread_trade[name_security_A][i]
+                long_B = (df_spread_trade[name_security_B][i] - df_spread_trade[name_security_B][i-1]) / df_spread_trade[name_security_B][i]
+                df_spread_trade["Returns"][i] = short_A + long_B
+                
+                # df_spread_trade["Returns"][i] = (df_spread_trade[name_security_A][i-1] - df_spread_trade[name_security_A][i])/df_spread_trade[name_security_A][i] + (df_spread_trade[name_security_B][i] - df_spread_trade[name_security_B][i-1])/df_spread_trade[name_security_B][i]
+            elif (df_spread_trade["Trade"][i-1] < 0):     # We are Long Security A, Short Security B
+                long_A = (df_spread_trade[name_security_A][i] - df_spread_trade[name_security_A][i-1]) / df_spread_trade[name_security_A][i]
+                short_B = -1 * (df_spread_trade[name_security_B][i] - df_spread_trade[name_security_B][i-1]) / df_spread_trade[name_security_B][i]
+                df_spread_trade["Returns"][i] = long_A + short_B
+                
+                # df_spread_trade["Returns"][i] = (df_spread_trade[name_security_A][i-1] - df_spread_trade[name_security_A][i])/df_spread_trade[name_security_B][i] + (df_spread_trade[name_security_B][i-1] - df_spread_trade[name_security_B][i])/df_spread_trade[name_security_B][i]
 
     # Sum Returns
     returns_long = 0
     returns_short = 0
     total_returns = 0
     for i in range(len(df_spread_trade)):
-        if (df_spread_trade["Trade"][i] > 0): 
-            returns_long += df_spread_trade["Returns"][i]
+        if i > 0:
+            if (df_spread_trade["Trade"][i-1] > 0): 
+                returns_long += df_spread_trade["Returns"][i]
 
-        elif (df_spread_trade["Trade"][i] < 0): 
-            returns_short += df_spread_trade["Returns"][i]
+            elif (df_spread_trade["Trade"][i-1] < 0): 
+                returns_short += df_spread_trade["Returns"][i]
 
         total_returns += df_spread_trade["Returns"][i]
     
@@ -88,7 +99,7 @@ def spread_trade(name_security_A, name_security_B, pairs_price, delay=0):
             sec_name = name_security_A[:i]
     sec_name = sec_name.strip("_")
 
-    return df_spread_trade #, returns_long, returns_short
+    return df_spread_trade
 
 # Empty securities lists
 securities_A = []
@@ -114,7 +125,7 @@ for (sec_A, sec_B) in zip(securities_A, securities_B):
     sec_name = sec_name.strip("_")
     names.append(sec_name)   
 
-output_file = pd.ExcelWriter(r"output_allsecs.xlsx")
+output_file = pd.ExcelWriter("output_allsecs.xlsx")
 for i, df in enumerate(df_list):
     df.to_excel(output_file, sheet_name="{0}".format(names[i]))
 
@@ -207,19 +218,3 @@ print("Annualized SR of portfolio with delay: ", SR_ann_delay)
 print("\n")
 print(df_plot)
 print(df_plot_delay)
-
-# Test
-df_plot_delay2 = returns_for_plot(pairs_price, delay = 2)
-df_plot_delay2 = df_plot_delay2 * 100
-
-df_plot_delay.plot()
-plt.xlabel("Date")
-plt.ylabel("Cumulative returns (%)")
-plt.grid()
-plt.show()
-
-SR_ann_delay2 = calc_SR(securities_A, securities_B, delay=2)
-
-print(SR_ann)
-print(SR_ann_delay)
-print(SR_ann_delay2)
