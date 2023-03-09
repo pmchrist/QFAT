@@ -154,35 +154,39 @@ plt.show()
 
 
 # Annualized SR of equal-weighted portfolio
-all_returns = dict()
-for (sec_A, sec_B) in zip(securities_A, securities_B):
+def calc_SR(securities_A, securities_B, delay = 0):
+    all_returns = dict()
+    for (sec_A, sec_B) in zip(securities_A, securities_B):
 
-        for i in range(max(len(sec_A), len(sec_B))):
-            if sec_A[:i] in sec_B:
-                sec_name = sec_A[:i]
-        sec_name = sec_name.strip("_")
+            for i in range(max(len(sec_A), len(sec_B))):
+                if sec_A[:i] in sec_B:
+                    sec_name = sec_A[:i]
+            sec_name = sec_name.strip("_")
 
-        df = spread_trade(sec_A, sec_B, pairs_price)
-        
-        all_returns[sec_name] = df["Returns"]
+            df = spread_trade(sec_A, sec_B, pairs_price, delay)
+            
+            all_returns[sec_name] = df["Returns"]
 
-returns_df = pd.DataFrame(all_returns)
+    returns_df = pd.DataFrame(all_returns)
 
-equalport_df = returns_df / 8
-equalport_df = equalport_df.sum(axis=1)
-equalport_list = list(equalport_df)
+    equalport_df = returns_df / 8
+    equalport_df = equalport_df.sum(axis=1)
+    equalport_list = list(equalport_df)
 
-# Annualized expected return
-mean_ret = stat.mean(equalport_list)
-mean_ret_ann = mean_ret * 250
+    # Annualized expected return
+    mean_ret = stat.mean(equalport_list)
+    mean_ret_ann = mean_ret * 250
 
-# Annualized standard deviation
-sd_ret = np.std(equalport_list)
-sd_ret_ann = sd_ret * math.sqrt(250)
+    # Annualized standard deviation
+    sd_ret = np.std(equalport_list)
+    sd_ret_ann = sd_ret * math.sqrt(250)
 
-# Annualized Sharpe Ratio
-SR_ann = mean_ret_ann / sd_ret_ann
+    # Annualized Sharpe Ratio
+    SR_ann = mean_ret_ann / sd_ret_ann
 
+    return SR_ann
+
+SR_ann = calc_SR(securities_A, securities_B)
 
 # 1_5C
 df_plot_delay = returns_for_plot(pairs_price, delay = 1)
@@ -195,38 +199,27 @@ plt.grid()
 plt.show()
 
 # Annualized SR calculation for equal-weighted portfolio
-all_returns2 = dict()
-for (sec_A, sec_B) in zip(securities_A, securities_B):
-
-        for i in range(max(len(sec_A), len(sec_B))):
-            if sec_A[:i] in sec_B:
-                sec_name = sec_A[:i]
-        sec_name = sec_name.strip("_")
-
-        df2 = spread_trade_delay(sec_A, sec_B, pairs_price)
-        
-        all_returns2[sec_name] = df2["Returns"]
-
-returns_df2 = pd.DataFrame(all_returns2)
-
-equalport_df2 = returns_df2 / 8
-equalport_df2 = equalport_df2.sum(axis=1)
-equalport_list2 = list(equalport_df2)
-
-# Annualized expected return
-mean_ret2 = stat.mean(equalport_list2)
-mean_ret_ann2 = mean_ret2 * 250
-
-# Annualized standard deviation
-sd_ret2 = np.std(equalport_list2)
-sd_ret_ann2 = sd_ret2 * math.sqrt(250)
-
-# Annualized Sharpe Ratio
-SR_ann2 = mean_ret_ann2 / sd_ret_ann2
+SR_ann_delay = calc_SR(securities_A, securities_B, delay=1)
 
 print("Annualized SR of portfolio without delay: ", SR_ann)
-print("Annualized SR of portfolio with delay: ", SR_ann2)
+print("Annualized SR of portfolio with delay: ", SR_ann_delay)
 
 print("\n")
 print(df_plot)
 print(df_plot_delay)
+
+# Test
+df_plot_delay2 = returns_for_plot(pairs_price, delay = 2)
+df_plot_delay2 = df_plot_delay2 * 100
+
+df_plot_delay.plot()
+plt.xlabel("Date")
+plt.ylabel("Cumulative returns (%)")
+plt.grid()
+plt.show()
+
+SR_ann_delay2 = calc_SR(securities_A, securities_B, delay=2)
+
+print(SR_ann)
+print(SR_ann_delay)
+print(SR_ann_delay2)
