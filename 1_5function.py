@@ -166,6 +166,7 @@ plt.show()
 
 # Annualized SR of equal-weighted portfolio
 def calc_SR(securities_A, securities_B, delay = 0):
+
     all_returns = dict()
     for (sec_A, sec_B) in zip(securities_A, securities_B):
 
@@ -180,20 +181,18 @@ def calc_SR(securities_A, securities_B, delay = 0):
 
     returns_df = pd.DataFrame(all_returns)
 
-    equalport_df = returns_df / 8
+    equalport_df = returns_df / 8               # Equal Weights
     equalport_df = equalport_df.sum(axis=1)
     equalport_list = list(equalport_df)
 
-    # Annualized expected return
-    mean_ret = stat.mean(equalport_list)
-    mean_ret_ann = mean_ret * 250
+    # Annual expected return
+    mean_ret = np.mean(equalport_list)
 
-    # Annualized standard deviation
+    # Standard deviation
     sd_ret = np.std(equalport_list)
-    sd_ret_ann = sd_ret * math.sqrt(250)
 
     # Annualized Sharpe Ratio
-    SR_ann = mean_ret_ann / sd_ret_ann
+    SR_ann = mean_ret / sd_ret * math.sqrt(252)
 
     return SR_ann
 
